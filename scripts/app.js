@@ -1,10 +1,4 @@
-//$(document).ready(function () {
-//$('#example').DataTable({
-//"ordering": [[ 0, "desc" ]]
-//});
-//});
- 
-    
+   
 const apiURL = `https://randomuser.me/api/?results=20&nat=us,ca&inc=name,gender, nat, dob`;
 const directoryContainer = document.querySelector('.directory-container');
 
@@ -24,13 +18,12 @@ fetch(apiURL)
 function displayUsers(userData) {
     
   var tbody = document.getElementById('tbody');
-  // LOOP THROUGH EACH USER AND CPOPULATE TABLE
+  // LOOP THROUGH EACH USER AND POPULATE TABLE
   userData.forEach((user, i) => {
     let name = user.name;    
     let gender = user.gender;
-    let country = user.nat;
-    let dob = user.dob.date.substring(0, 10); 
-    
+    let country = (user.nat == 'CA') ? "Canada" : user.nat;
+    let dob = user.dob.date.substring(5,7) + "/" + user.dob.date.substring (8,10) + "/" + user.dob.date.substring(0,4);     
     let birthday = user.dob.date.substring(5, 7) + user.dob.date.substring(8, 10) ;     
     let birthdayString = getBirthday(birthday);    
        
@@ -48,20 +41,19 @@ function displayUsers(userData) {
         var cellBirthday= row.insertCell();
         cellBirthday.innerHTML =  birthdayString;   
   });
+}
   
-  }
-  
-  function getBirthday(birthday){
-  
+  // GET BIRTHDAY FIELD MESSAGE
+  function getBirthday(birthday){  
    var today = new Date();
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+   var dd = String(today.getDate()).padStart(2, '0');
+   var mm = String(today.getMonth() + 1).padStart(2, '0'); 
 
-today =  mm + dd;
-  var birthdayString ="";
+    today =  mm + dd;
+   var birthdayString ="";
   
   if( birthday == today) {
-    birthdayString = "Birthday is today!"; 
+      birthdayString = "Birthday is today!"; 
   } else if ( birthday > today){
     birthdayString = "Birthday has yet to occur";  
   } else {
